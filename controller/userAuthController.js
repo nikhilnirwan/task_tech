@@ -8,6 +8,7 @@ const AppErr = require("../utils/AppErr");
 const encryptPassword = require("../helpers/encryptPassword");
 const User = require("../model/userModel");
 const util = require("../utils/message");
+const { sendMail } = require("../helpers/sendMail");
 
 // create jwt token
 const signToken = (id) => {
@@ -32,14 +33,7 @@ const createSendToken = (user, res) => {
 
   user.token = token;
 
-  // res.message = "User successfully register."
-  // return util.successResponse(user, res);
   return token;
-  // res.status(statusCode).json({
-  //   status: "success",
-  //   token: token,
-  //   user: user,
-  // });
 };
 
 // SIGNUP
@@ -64,6 +58,15 @@ exports.signup = catchAsync(async (req, res, next) => {
 
   doc.password = undefined;
   const token = createSendToken(doc, res);
+
+  // email send details
+  const emailDetails = {
+    fistName: fistName,
+    lastName: lastName,
+    email: email,
+    password: password,
+  };
+  await sendMail(emailDetails);
 
   const user = {
     ...doc._doc,

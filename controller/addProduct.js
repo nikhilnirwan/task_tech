@@ -35,7 +35,7 @@ exports.uploadImage = catchAsync(async (req, res, next) => {
       };
     })
   );
-  await Product.findByIdAndUpdate({ _id: id }, { $addToSet: { images: await images } }, { upsert: true, new: true });
+  await Product.findByIdAndUpdate({ _id: id }, { $push: { images: await images } }, { upsert: true, new: true });
 
   res.message = "File uploaded successfully.";
   return util.successResponse([], res);
