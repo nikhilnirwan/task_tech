@@ -6,8 +6,8 @@ module.exports = {
       port: 3000,
       tls: true,
       auth: {
-        user: process.env.FROM_EMAIL,
-        pass: process.env.PASSWORD,
+        user: process.env.FROM_EMAIL, // set config.env file email
+        pass: process.env.PASSWORD, // 16 digit generate password of email
       },
     });
 

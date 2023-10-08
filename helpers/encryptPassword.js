@@ -4,6 +4,5 @@ exports.hashPassword = async function (pwd) {
 };
 
 exports.unHashPassword = async function (pwd, hashPwd) {
-  console.log(pwd, hashPwd);
   return await bcrypt.compare(pwd, hashPwd);
 };

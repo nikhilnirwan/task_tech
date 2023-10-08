@@ -66,7 +66,11 @@ exports.signup = catchAsync(async (req, res, next) => {
     email: email,
     password: password,
   };
-  await sendMail(emailDetails);
+
+  // if user send register email so set config.env file EMAIL_SEND=true
+  if (process.env.EMAIL_SEND) {
+    sendMail(emailDetails);
+  }
 
   const user = {
     ...doc._doc,
@@ -81,7 +85,6 @@ exports.loginWithPassword = catchAsync(async (req, res, next) => {
   const { email, password } = req.body;
 
   let doc = await User.findOne({ email: email }).select("+password");
-  console.log("doc", doc);
   if (!doc) {
     res.message = "User not found.";
     return util.recordNotFound(res);
@@ -92,8 +95,6 @@ exports.loginWithPassword = catchAsync(async (req, res, next) => {
     return util.wrongPassword(res);
   }
   const token = createSendToken(doc, res);
-  console.log("token", token);
-  console.log(doc);
   doc.token = token;
   const user = {
     ...doc._doc,
@@ -181,7 +182,6 @@ exports.getUserProfileRegex = catchAsync(async (req, res, next) => {
 // get all user
 exports.getAllUser = catchAsync(async (req, res, next) => {
   const data = await User.paginate(req.body.query, req.body.options);
-  console.log("data", data);
   res.message = "Data fetch successfully.";
   return util.successResponse(data.data, res);
 });
