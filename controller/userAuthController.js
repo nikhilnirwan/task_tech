@@ -42,7 +42,7 @@ exports.signup = catchAsync(async (req, res, next) => {
 
   const userDetail = await User.findOne({ email: email });
   if (userDetail) {
-    res.message = "Email already exists.";
+    res.message = "Email already exists";
     return util.documentExits([], res);
   }
 
